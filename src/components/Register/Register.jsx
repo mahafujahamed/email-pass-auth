@@ -9,7 +9,7 @@ const Register = () => {
         const password = event.target.password.value; 
         console.log(email, password);
         
-    }
+    }   
 
     const handleEmailChange = (event) => {
         // console.log(event.target.value);
