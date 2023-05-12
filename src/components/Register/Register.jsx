@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import {getAuth} from '/firebase/auth';
+
+const auth = getAuth(app);
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -10,7 +13,6 @@ const Register = () => {
         console.log(email, password);
         
     }   
-
     const handleEmailChange = (event) => {
         // console.log(event.target.value);
         setEmail(event.target.value);
@@ -21,14 +23,14 @@ const Register = () => {
     }
 
     return (
-        <div>
-           <h1> Please Register</h1> 
+        <div className='w-50 mx-auto'>
+           <h1 className='text-danger'>Please Register</h1> 
            <form onSubmit={handleSubmit}>
-            <input onChange={handleEmailChange} type='email' name='email' id='email' placeholder='your email'></input>
+            <input className='w-50 mb-4 rounded ps-2' onChange={handleEmailChange} type='email' name='email' id='email' placeholder='your email'></input>
             <br />
-            <input onBlur={handlePasswordBlur} type='password' name='password' id='password' placeholder='your password'></input>
+            <input className='w-50 mb-4 rounded ps-2' onBlur={handlePasswordBlur} type='password' name='password' id='password' placeholder='your password'></input>
             <br />
-            <input type='submit' value='Register'></input>
+            <input className='btn btn-primary' type='submit' value='Register'></input>
            </form>
         </div>
     );
