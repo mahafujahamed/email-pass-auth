@@ -5,7 +5,8 @@ import app from '../../firebase/firebase.config';
 const auth = getAuth(app);
 
 const Register = () => {
-    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleSubmit = (event) => {
         // prvent page refresh
@@ -19,15 +20,20 @@ const Register = () => {
         .then(result => {
             const loggedUser = result.user;
             console.log(loggedUser);
+            setError('');
+            event.target.reset();
+            setSuccess('User has been created successfully');
         })
         .catch(error => {
-            console.error(error);
+            console.error(error.message);
+            setError(error.message);
+            setSuccess('');
         })
         
     }   
     const handleEmailChange = (event) => {
         // console.log(event.target.value);
-        setEmail(event.target.value);
+        // setEmail(event.target.value);
     } 
 
     const handlePasswordBlur = (event) => {
@@ -38,12 +44,14 @@ const Register = () => {
         <div className='w-50 mx-auto'>
            <h1 className='text-danger'>Please Register</h1> 
            <form onSubmit={handleSubmit}>
-            <input className='w-50 mb-4 rounded ps-2' onChange={handleEmailChange} type='email' name='email' id='email' placeholder='your email'></input>
+            <input className='w-50 mb-4 rounded ps-2' onChange={handleEmailChange} type='email' name='email' id='email' placeholder='your email' required></input>
             <br />
-            <input className='w-50 mb-4 rounded ps-2' onBlur={handlePasswordBlur} type='password' name='password' id='password' placeholder='your password'></input>
+            <input className='w-50 mb-4 rounded ps-2' onBlur={handlePasswordBlur} type='password' name='password' id='password' placeholder='your password' required></input>
             <br />
             <input className='btn btn-primary' type='submit' value='Register'></input>
            </form>
+           <p className='text-danger'>{error}</p>
+           <p>{success}</p>
         </div>
     );
 };
