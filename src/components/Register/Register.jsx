@@ -11,16 +11,32 @@ const Register = () => {
     const handleSubmit = (event) => {
         // prvent page refresh
         event.preventDefault();
+         setError('');
+         setSuccess('');
         // collect form data
         const email = event.target.email.value;
         const password = event.target.password.value; 
         console.log(email, password);
+
+        // validate password
+        if(!/(?=.*[A-Z])/.test(password)){
+            setError('Password must contain at least one uppercase letter');
+            return;
+        }
+        else if(!/(?=.*[0-9].*[0-9])/.test(password)){
+            setError('Password must contain at least two digits');
+            return;
+        }
+        else if(password.length < 8){
+            setError('Password must be at least 8 characters long');
+            return;
+        }
+
         // create user with email and password
         createUserWithEmailAndPassword(auth, email, password)
         .then(result => {
             const loggedUser = result.user;
             console.log(loggedUser);
-            setError('');
             event.target.reset();
             setSuccess('User has been created successfully');
         })
