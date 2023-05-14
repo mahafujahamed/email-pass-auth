@@ -57,7 +57,7 @@ const Login = () => {
         return;
      }
      sendPasswordResetEmail(auth, email)
-        .then(result => {
+        .then( () => {
             alert('A password reset email has been sent to your email address. Please check your email');
         }
         )

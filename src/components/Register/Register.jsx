@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {createUserWithEmailAndPassword, getAuth} from 'firebase/auth';
+import {createUserWithEmailAndPassword, getAuth, updateProfile} from 'firebase/auth';
 import app from '../../firebase/firebase.config';
 import { Link } from 'react-router-dom';
 
@@ -16,7 +16,8 @@ const Register = () => {
          setSuccess('');
         // collect form data
         const email = event.target.email.value;
-        const password = event.target.password.value; 
+        const password = event.target.password.value;
+        const name = event.target.name.value; 
         console.log(email, password);
 
         // validate password
@@ -41,6 +42,7 @@ const Register = () => {
             event.target.reset();
             setSuccess('User has been created successfully');
             sendVerificationEmail(result.user);
+            updateUserData(result.user, name);
         })
         .catch(error => {
             console.error(error.message);
@@ -56,6 +58,19 @@ const Register = () => {
             alert('A verification email has been sent to your email address. Please verify your email address');
         })
     } 
+
+    const updateUserData = (user, name) => {
+        updateProfile(user, {
+            displayName: name
+        })
+        .then(() => {
+            console.log('user name updated successfully')
+        })
+        .catch(error => {
+            console.log(error.message);
+            setError(error.message);
+        })
+    }
     
     const handleEmailChange = (event) => {
         // console.log(event.target.value);
@@ -70,6 +85,8 @@ const Register = () => {
         <div className='w-50 mx-auto'>
            <h1 className='text-danger'>Please Register</h1> 
            <form onSubmit={handleSubmit}>
+            <input className='w-50 mb-4 rounded ps-2' type='text' name='name' id='name' placeholder='your name' required></input>
+            <br />
             <input className='w-50 mb-4 rounded ps-2' onChange={handleEmailChange} type='email' name='email' id='email' placeholder='your email' required></input>
             <br />
             <input className='w-50 mb-4 rounded ps-2' onBlur={handlePasswordBlur} type='password' name='password' id='password' placeholder='your password' required></input>
