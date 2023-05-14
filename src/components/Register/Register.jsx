@@ -28,7 +28,7 @@ const Register = () => {
             setError('Password must contain at least two digits');
             return;
         }
-        else if(password.length < 8){
+        else if(password.length < 6){
             setError('Password must be at least 8 characters long');
             return;
         }
@@ -40,14 +40,23 @@ const Register = () => {
             console.log(loggedUser);
             event.target.reset();
             setSuccess('User has been created successfully');
+            sendVerificationEmail(result.user);
         })
         .catch(error => {
             console.error(error.message);
             setError(error.message);
             setSuccess('');
+        })   
+    } 
+    
+    const sendVerificationEmail = (user) => {
+        sendVerificationEmail(user)
+        .then(result => {
+            console.log(result);
+            alert('A verification email has been sent to your email address. Please verify your email address');
         })
-        
-    }   
+    } 
+    
     const handleEmailChange = (event) => {
         // console.log(event.target.value);
         // setEmail(event.target.value);
