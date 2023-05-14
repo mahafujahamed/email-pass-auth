@@ -1,5 +1,5 @@
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useState } from 'react';
+import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useRef, useState } from 'react';
 import app from '../../firebase/firebase.config';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ const Login = () => {
 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const emailRef = useRef('');
 
     const handleLogin = (event) => {
         event.preventDefault();
@@ -49,13 +50,32 @@ const Login = () => {
             })
     }
 
+    const handleResetPassword = (event) => {
+     const email = emailRef.current.value;
+     if(!email){
+        alert('Please provide your email address');
+        return;
+     }
+     sendPasswordResetEmail(auth, email)
+        .then(result => {
+            alert('A password reset email has been sent to your email address. Please check your email');
+        }
+        )
+        .catch(error => {
+            console.log(error);
+            setError(error.message);
+        }
+        )
+
+    }
+
     return (
         <div className='w-25 mx-auto'>
             <h1>Please Login</h1>
             <form onSubmit={handleLogin}>
                 <div className="form-group">
                     <label htmlFor="email">Email address</label>
-                    <input type="email" name='email' className="form-control mb-4" id="email" placeholder="Enter email" required />
+                    <input type="email" name='email' ref={emailRef} className="form-control mb-4" id="email" placeholder="Enter email" required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
@@ -67,6 +87,7 @@ const Login = () => {
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
+            <p><small>Forget Password? Please <button onClick={handleResetPassword} className='btn btn-link'>Reset</button></small></p>
             <p><small>New to this Website? Please <Link to="/register">Register</Link></small></p>
             <p className='text-danger'>{error}</p>
             <p className='text-success'>{success}</p>
